@@ -136,25 +136,23 @@ class Number(Card):
                 #Loops 60 seconds - Deleted after 2 seconds or more (ClusterFUCK)
                 if seconds < 0.5:
                     pass
-                if seconds < 0.7:
+                if seconds < 0.6 and seconds > 0.5:
                     self.poof = pygame.image.load('graphics/poof.png').convert()
                     self.poof.set_colorkey("black")
                     self.image = pygame.transform.scale(self.poof, (self.surfaceScaled[0] , self.surfaceScaled[1]))
-                if seconds > 0.7 and seconds < 0.9:
+                if seconds > 0.5 and seconds < 0.8:
                     self.poof = pygame.image.load('graphics/poof_2.png').convert()
                     self.poof.set_colorkey("black")
                     self.image = pygame.transform.scale(self.poof, (self.surfaceScaled[0] , self.surfaceScaled[1]))
-                if seconds > 1.1 and seconds < 1.3:
+                if seconds > 0.9 and seconds < 1.1:
                     self.poof = pygame.image.load('graphics/poof_3.png').convert()
                     self.poof.set_colorkey("black")
                     self.poof = pygame.transform.scale(self.poof, (self.surfaceScaled[0], self.surfaceScaled[1]) )
-                if seconds > 1.5 and seconds < 2:
+                if seconds > 1.1 and seconds < 1.3:
                     self.poof = pygame.image.load('graphics/poof_end.png').convert()
                     self.poof.set_colorkey("black")
                     self.image = pygame.transform.scale(self.poof, (self.surfaceScaled[0], self.surfaceScaled[1]) )                
-
-                elif seconds >= 2:
-                    print("Deleting Card")
+                elif seconds >= 1.3:
                     cards.remove(self)    
    
     def followMouse(self, event_list):
