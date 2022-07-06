@@ -96,8 +96,8 @@ class PlayCard(Card):
         #Update per tick, + 1 to y
         self.acceleration += 1
         self.rect.y += self.acceleration
-        if self.rect.bottom >= 600:
-            self.rect.bottom = 600
+        if self.rect.bottom >= 800:
+            self.rect.bottom = 800
             #After stopping...
             self.moved = True
             #Record location
@@ -191,9 +191,9 @@ cardPositionsGroup = pygame.sprite.Group()
 class CardPositions():
     def __init__(self):
         #0 indicates spot open, 1 means closed
-        self.spots = [0,0,0,0,0]
-        self.positions = [(50,500),(175,500),(300,500), 
-        (425,500),(550,500)]
+        self.spots = [0,0,0,0,0,0]
+        self.positions = [(50,700),(175,700),(300,700), 
+        (425,700),(550,700),(675,700)]
         self.maxPositionNumber = len(self.positions)
         index = 0
         for x in self.positions:
