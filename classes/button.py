@@ -25,10 +25,10 @@ class Buttons(pygame.sprite.Sprite):
                 if (self.rect.collidepoint(pygame.mouse.get_pos())):
                     #Spawns card with Number, Letter or Nothing
                     if self.text == "Number":
-                        classes.cardsObject.cards.add(classes.cardsObject.Number(randint(1,10)))
+                        classes.cardsObject.cards.add(classes.cardsObject.PlayCard(randint(1,10)))
                     elif self.text == "Letter":
                         letter_list = ['A', 'B', 'C']
-                        classes.cardsObject.cards.add(classes.cardsObject.Number(choice(letter_list)))
+                        classes.cardsObject.cards.add(classes.cardsObject.PlayCard(choice(letter_list)))
                     else:
                         classes.cardsObject.cards.add(classes.cardsObject.Card())
                     #Highlight Button when Clicked
@@ -60,7 +60,7 @@ class DealButton(Buttons):
         for event in event_list:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if (self.rect.collidepoint(pygame.mouse.get_pos())):
-                    #Spawns card with Number, Letter or Nothing
+                    #Spawns card with Sword, Magic or Nothing
                     #Calls card avaliableSpot() method
                     #Has a limit of cards that can be called
                     try:
@@ -72,12 +72,11 @@ class DealButton(Buttons):
                     except:
                         print("Limit of cards reached")
                     else:
-                        if self.text == "Number":
-                            classes.cardsObject.cards.add(classes.cardsObject.Number(randint(1,10), (pos)))
-                        elif self.text == "Letter":
-                            letter_list = ['A', 'B', 'C']
-                            ##Planned - call cardsObject.postionm whatever to return an avaliable position
-                            classes.cardsObject.cards.add(classes.cardsObject.Number(choice(letter_list), (pos)))
+                        if self.text == "Sword":
+                            #Provide: position, number and what kind of card to create
+                            classes.cardsObject.cards.add(classes.cardsObject.PlayCard(randint(1,10),(pos),self.text))
+                        elif self.text == "Magic":
+                            classes.cardsObject.cards.add(classes.cardsObject.PlayCard(randint(1,10),(pos),self.text))
                         else:
                             classes.cardsObject.cards.add(classes.cardsObject.Card((pos)))
                         #Highlight Button when Clicked

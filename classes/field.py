@@ -1,5 +1,5 @@
 import pygame
-from classes.cardsObject import cards, Number
+from classes.cardsObject import cards, PlayCard
 
 
 class Playfield(pygame.sprite.Sprite):
@@ -63,7 +63,7 @@ class Playfield(pygame.sprite.Sprite):
                                 dropped_card.rect.center = self.rect.center
                                 dropped_card.__setattr__("surfaceScaled", new_scale )
                                 #Start Timer to Play Animation
-                                Number.cardKillTimer(dropped_card)
+                                PlayCard.cardKillTimer(dropped_card)
                                 #Check if normal card or number card
                                 number = getattr(dropped_card, "number")
                                 text_position = list(self.position)

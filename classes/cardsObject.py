@@ -3,7 +3,7 @@ import pygame
 
 #Parent Card Class
 class Card(pygame.sprite.Sprite):
-    def __init__(self,position=0, number=0):
+    def __init__(self,position=0, number=0, icontype=""):
         super().__init__()
         self.image = pygame.Surface((150, 250))
         self.image.fill('grey')
@@ -11,7 +11,9 @@ class Card(pygame.sprite.Sprite):
         self.surfaceScaled = [150, 250]
         #Random Spawn for Testing Purposes
         self.position = position
+        self.type = icontype
         self.fieldCollision = False
+
         #Assign position if supplied
         if position != 0:
             self.rect = self.image.get_rect(midbottom = self.position)
@@ -29,56 +31,27 @@ class Card(pygame.sprite.Sprite):
         self.cardart = pygame.draw.circle(self.image, self.colour, (100,50), 50, 20)
         self.cardart2 = pygame.draw.circle(self.image, self.colour, (50,150), 75, 25)
 
-
-    def followMouse(self):
-        #Set rectangle position to mouse cursor - if not already holding a card
-        if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()): 
-            card_list = cards.get_sprites_at(pygame.mouse.get_pos())
-            #The last card object (highest layer) is selected
-            card_list[len(card_list)-1].rect.center = pygame.mouse.get_pos()
-            #Move selected card to front of layeredupdate group
-            cards.move_to_front(card_list[len(card_list)-1])
-        
-
     def checkIfTopCard(self):
         card_list = cards.get_sprites_at(pygame.mouse.get_pos())
         if self == card_list[len(card_list)-1]:
             return True
-  
-    def expandUponHover(self):
-        #When user hovers over card - enlarge and highlight
-        multiplier = 1.05
-        if not pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
-            #Only highlight the top card when hovering over multiple cards
-            if self.checkIfTopCard():
-                #If not in field, scale image for increased visibility
-                if not self.fieldCollision:
-                    self.image = pygame.transform.smoothscale(self.image, (self.surfaceScaled[0]*multiplier , self.surfaceScaled[1]*multiplier))
-                    self.highlight_border = pygame.draw.rect(self.image, 'gold', self.image.get_rect(), 5, 5)
-        #If not in Field
-        elif not self.fieldCollision:
-            self.image = pygame.Surface((self.surfaceScaled[0], self.surfaceScaled[1]))
-            self.image.fill('grey')
-            self.createCardDetails()
-            
-
 
     def update(self):
-        self.followMouse()
-        self.expandUponHover()
+        pass
 
 
 
 #Class Inherit from Card, Store Number or String Values 
-class Number(Card):
-    def __init__(self, number,position=0):
+class PlayCard(Card):
+    def __init__(self, number,position=0, icontype=""):
         #Send values back to Parent(Card)
-        super().__init__(position, number)
+        super().__init__(position, number, icontype="")
         self.number = number
         self.position = position
         self.acceleration = 1
         self.moved = False
-        
+        #Icon Type
+        self.type = icontype
 
 
     def updateSurface(self, coord):
@@ -92,8 +65,16 @@ class Number(Card):
         self.border = pygame.image.load("graphics/border.png")
         #Remove black from image
         self.border.set_colorkey("black")
-        #Number gen
+        #Icon
+        if self.type == "Sword":
+            self.icon = pygame.image.load('graphics/sword_icon.png')
+        elif self.type == "Magic":
+            self.icon = pygame.image.load('graphics/magic_icon.png')
+        else:
+            self.icon = pygame.image.load("graphics/border.png")
+        self.icon.set_colorkey('white')
 
+        #Number gen + Scaling
         if normal_size == self.image.get_width():
             font = pygame.font.SysFont(None, 120)
             img = font.render((f"{self.number}"), True, self.colour)
@@ -101,6 +82,7 @@ class Number(Card):
             #self.border = pygame.draw.rect(self.image, 'blue', self.image.get_rect(), 10)
             self.image.blit(img, self.image.get_rect().center)
             self.image.blit(self.border, self.image.get_rect())
+            self.image.blit(self.icon, self.image.get_rect().topleft)
         else:
             #Font smaller to scale it down, doesn't look janky
             font = pygame.font.SysFont(None, 80)
@@ -155,6 +137,22 @@ class Number(Card):
                 elif seconds >= 1.3:
                     cards.remove(self)    
    
+    def expandUponHover(self):
+        #When user hovers over card - enlarge and highlight
+        multiplier = 1.05
+        if not pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()):
+            #Only highlight the top card when hovering over multiple cards
+            if self.checkIfTopCard():
+                #If not in field, scale image for increased visibility
+                if not self.fieldCollision:
+                    self.image = pygame.transform.smoothscale(self.image, (self.surfaceScaled[0]*multiplier , self.surfaceScaled[1]*multiplier))
+                    self.highlight_border = pygame.draw.rect(self.image, 'gold', self.image.get_rect(), 5, 5)
+        #If not in Field
+        elif not self.fieldCollision:
+            self.image = pygame.Surface((self.surfaceScaled[0], self.surfaceScaled[1]))
+            self.image.fill('grey')
+            self.createCardDetails()
+
     def followMouse(self, event_list):
         #Set rectangle position to mouse cursor - if not already holding a card
         #If the card is not in a field, allow it to be clicked

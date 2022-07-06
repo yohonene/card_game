@@ -22,18 +22,11 @@ b = classes.button
 f = classes.field
 
 #Initial Game State Object Paramaters
-def debugLevel():
-    #Create Button Object
-        #Button Positions on Area
-    buttonPositionList = [(100,100),(100,300),(100,500)]
-    b.buttonGroup.add(classes.button.Buttons('orange', 100, 75, buttonPositionList[0], 'Normal' ))
-    b.buttonGroup.add(classes.button.Buttons('green', 100, 75, buttonPositionList[1], 'Number' ))
-    b.buttonGroup.add(classes.button.Buttons('blue', 100, 75, buttonPositionList[2], 'Letter' ))
-    #Field Object
-    f.fieldGroup.add(classes.field.Playfield((500,425)))
+
 def levelCreate():
-    buttonPositionList = [(100,100)]
-    b.buttonGroup.add(classes.button.DealButton('orange', 100, 75, buttonPositionList[0], 'Number' ))
+    buttonPositionList = [(100,100),(100,200),(100,300)]
+    b.buttonGroup.add(classes.button.DealButton('orange', 100, 75, buttonPositionList[0], 'Sword' ))
+    b.buttonGroup.add(classes.button.DealButton('green', 100, 75, buttonPositionList[1], 'Magic' ))
     f.fieldGroup.add(classes.field.Playfield((400,225)))
 
 #Populate Background
@@ -41,9 +34,7 @@ bg = pygame.Surface(screen.get_size()).convert()
 bg.fill((100,100,100))
 
 #Create objects for each level
-if debug:
-    debugLevel()
-elif level:
+if level:
     levelCreate()
 
 #Event Loop
