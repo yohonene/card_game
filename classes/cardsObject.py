@@ -1,5 +1,6 @@
 from random import randint, choice
 import pygame
+from classes.player import PlayerObj
 
 #Parent Card Class
 class Card(pygame.sprite.Sprite):
@@ -156,23 +157,25 @@ class PlayCard(Card):
     def followMouse(self, event_list):
         #Set rectangle position to mouse cursor - if not already holding a card
         #If the card is not in a field, allow it to be clicked
-        if not self.fieldCollision:
-            if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()): 
-                card_list = cards.get_sprites_at(pygame.mouse.get_pos())
-                #The last card object (highest layer) is selected
-                card_list[len(card_list)-1].rect.center = pygame.mouse.get_pos()
-                #Move selected card to front of layeredupdate group
-                cards.move_to_front(card_list[len(card_list)-1])
-
-            for event in event_list:
-                #If holding the card and mouse is released, put card back in it spawn position
-                if event.type == pygame.MOUSEBUTTONUP and self.rect.collidepoint(pygame.mouse.get_pos()):
+        #If Players Turn
+        if PlayerObj.turn:
+            if not self.fieldCollision:
+                if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()): 
                     card_list = cards.get_sprites_at(pygame.mouse.get_pos())
-                    #If not colliding with field (to play card)
-                    if not self.fieldCollision:
-                        card_list[len(card_list)-1].rect.midbottom = self.position
-                        #To allow animation of falling
-                        self.moved = False
+                    #The last card object (highest layer) is selected
+                    card_list[len(card_list)-1].rect.center = pygame.mouse.get_pos()
+                    #Move selected card to front of layeredupdate group
+                    cards.move_to_front(card_list[len(card_list)-1])
+
+                for event in event_list:
+                    #If holding the card and mouse is released, put card back in it spawn position
+                    if event.type == pygame.MOUSEBUTTONUP and self.rect.collidepoint(pygame.mouse.get_pos()):
+                        card_list = cards.get_sprites_at(pygame.mouse.get_pos())
+                        #If not colliding with field (to play card)
+                        if not self.fieldCollision:
+                            card_list[len(card_list)-1].rect.midbottom = self.position
+                            #To allow animation of falling
+                            self.moved = False
 
     def update(self, event_list):
         #If card has supplied coordinates and hasn't moved before, allow acceleration

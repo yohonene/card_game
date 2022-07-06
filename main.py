@@ -62,7 +62,7 @@ while True:
         c.cards.update(event_list)
         e.enemyGroup.draw(screen)
         e.healthGroup.draw(screen)
-        e.enemyGroup.update()
+        e.enemyGroup.update(event_list)
 
     
     pygame.display.update()

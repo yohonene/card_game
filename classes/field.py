@@ -1,6 +1,7 @@
 import pygame
 from classes.cardsObject import cards, PlayCard
 from classes.enemyObj import enemyGroup, Enemy
+from classes.player import PlayerObj
 
 
 class Playfield(pygame.sprite.Sprite):
@@ -89,12 +90,27 @@ class Playfield(pygame.sprite.Sprite):
                                     textFieldGroup.remove(fieldText(test_display, tuple(text_position)))
                                     #Set bool to false, allow text to be created
                                     self.textObjectCreated = False
+                                #Change Turn to Enemy if still Alive
+                                self.changeTurn()
     
     def affectEnemy(self, number, cardtype):
         #Update enemy object with damage
             #If enemy still exists
         if enemyGroup.sprite:
             Enemy.updateHealth(enemyGroup.sprite, number)
+
+    #####CHANGE TURN METHOD#####
+    def changeTurn(self):
+        #If enemy still exists
+        if len(enemyGroup) > 0:
+            #Change turn from self to enemy
+            PlayerObj.turn = False
+            #Start timer for animation
+            Enemy.setTimer(enemyGroup.sprite)
+            #Change enemy turn to True
+            Enemy.__setattr__(enemyGroup.sprite,"turn", True)
+    #############################   
+    
     def update(self, event_list):
         self.collision_sprite(event_list)
         self.produceHighlight()
@@ -119,4 +135,3 @@ class fieldText(pygame.sprite.Sprite):
         font = pygame.font.SysFont(None, 80)
         img = font.render(self.text, True, 'white')
         self.image.blit(img, (100,100))
-

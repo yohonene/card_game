@@ -1,4 +1,6 @@
+from random import randint
 import pygame
+from classes.player import PlayerObj
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -8,6 +10,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image.set_colorkey("white")
         self.health = 20
         self.hpbar = HealthBar(self.health)
+        self.turn = False
         healthGroup.add(self.hpbar)
 
     def updateHealth(self, damage):
@@ -23,8 +26,29 @@ class Enemy(pygame.sprite.Sprite):
                 healthGroup.empty()
                 print("Enemy Slain")
 
-        
+    def setTimer(self):
+        self.attack_animation = pygame.USEREVENT + 2
+        #500 millisecond animation
+        pygame.time.set_timer(self.attack_animation,1000,1)
 
+    def enemyTurn(self, event_list):
+        for event in event_list:
+            if event.type == self.attack_animation:
+                #Do animation
+                #Damage player
+                print(f'Player HP: {PlayerObj.health}')
+                PlayerObj.health -= randint(5,10)
+                print(f'Player HP: {PlayerObj.health}')
+                #Make it players turn
+                PlayerObj.turn = True
+                self.turn = False
+
+    def update(self, event_list):
+        if self.turn:
+            self.enemyTurn(event_list)
+
+
+    
 enemyGroup = pygame.sprite.GroupSingle()
 healthGroup = pygame.sprite.GroupSingle()
 
