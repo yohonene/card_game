@@ -3,6 +3,7 @@ import classes.cardsObject
 import classes.button
 import classes.field
 import classes.enemyObj
+import classes.player
 from sys import exit
 
 
@@ -22,6 +23,7 @@ c = classes.cardsObject
 b = classes.button
 f = classes.field
 e = classes.enemyObj
+p = classes.player
 
 #Initial Game State Object Paramaters
 
@@ -31,6 +33,7 @@ def levelCreate():
     b.buttonGroup.add(classes.button.DealButton('green', 100, 75, buttonPositionList[1], 'Magic' ))
     f.fieldGroup.add(classes.field.Playfield((600,500)))
     e.enemyGroup.add(classes.enemyObj.Enemy())
+    p.playerHealthText.add(classes.player.PlayerHealth())
 
 #Populate Background
 bg = pygame.Surface(screen.get_size()).convert()
@@ -56,6 +59,7 @@ while True:
         f.fieldGroup.update(event_list)
         c.cardPositionsGroup.draw(screen)
         c.cardPositionsGroup.update()
+        c.cardPositionObject.update()
         b.buttonGroup.draw(screen)
         b.buttonGroup.update(event_list)
         c.cards.draw(screen)
@@ -63,6 +67,7 @@ while True:
         e.enemyGroup.draw(screen)
         e.healthGroup.draw(screen)
         e.enemyGroup.update(event_list)
+        p.playerHealthText.draw(screen)
 
     
     pygame.display.update()

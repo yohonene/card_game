@@ -1,6 +1,6 @@
 from random import randint, choice
 import pygame
-from classes.player import PlayerObj
+from classes.player import PlayerObj, playerHealthText, PlayerHealth
 
 #Parent Card Class
 class Card(pygame.sprite.Sprite):
@@ -204,18 +204,24 @@ class CardPositions():
             #Supply object with index position that relates to self.positions
             index += 1
 
+    def updateCardCountText(self):
+        #Set amount of cards in hand to playerob
+        PlayerObj.card_count = self.spots.count(1)
+        #Update player text (groupsingle automatically
+        # deletes last text)
+        playerHealthText.add(PlayerHealth())
 
     def avaliableSpot(self):
         for x in range(self.maxPositionNumber):
             #If position 1 is avaliable
-            
             if self.positions[self.maxPositionNumber-1] == 1:
                 raise Exception('Exceeded maximum amount of card positions')
             elif not self.spots[x]:
-                #Set it unavaiable
-                #self.spots[x] = 1
                 #Return position
                 return self.positions[x]
+
+    def update(self):
+        self.updateCardCountText()
     #Invididual Card Spots Created by CardPositions Class
     class CardHolder(pygame.sprite.Sprite):
         def __init__(self, pos, index):

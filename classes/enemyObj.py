@@ -1,6 +1,6 @@
 from random import randint
 import pygame
-from classes.player import PlayerObj
+from classes.player import PlayerObj, playerHealthText, PlayerHealth
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -36,9 +36,12 @@ class Enemy(pygame.sprite.Sprite):
             if event.type == self.attack_animation:
                 #Do animation
                 #Damage player
-                print(f'Player HP: {PlayerObj.health}')
                 PlayerObj.health -= randint(5,10)
-                print(f'Player HP: {PlayerObj.health}')
+                #Increase turn count
+                PlayerObj.turn_count += 1
+                #Update player text (groupsingle automatically
+                # deletes last text)
+                playerHealthText.add(PlayerHealth())
                 #Make it players turn
                 PlayerObj.turn = True
                 self.turn = False
