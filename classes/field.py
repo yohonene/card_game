@@ -1,5 +1,6 @@
 import pygame
 from classes.cardsObject import cards, PlayCard
+from classes.enemyObj import enemyGroup, Enemy
 
 
 class Playfield(pygame.sprite.Sprite):
@@ -46,7 +47,6 @@ class Playfield(pygame.sprite.Sprite):
                         card_list = cards.get_sprites_at(pygame.mouse.get_pos())
                         #If list isn't empty
                         if len(card_list) > 0:
-                            print("hi")
                             #Assign to variable for clarity
                             dropped_card = card_list[len(card_list)-1]
                             #Makes sure you cannot click card in field
@@ -70,6 +70,9 @@ class Playfield(pygame.sprite.Sprite):
                                 #Check if normal card or number card
                                 number = getattr(dropped_card, "number")
                                 cardtype = getattr(dropped_card, "type")
+                                #Apply card effects to enemy    
+                                self.affectEnemy(number, cardtype)
+                                ##
                                 text_position = list(self.position)
                                 #Create text to display
                                 test_display = str(number) + " " + cardtype
@@ -86,6 +89,12 @@ class Playfield(pygame.sprite.Sprite):
                                     textFieldGroup.remove(fieldText(test_display, tuple(text_position)))
                                     #Set bool to false, allow text to be created
                                     self.textObjectCreated = False
+    
+    def affectEnemy(self, number, cardtype):
+        print(number)
+        print(cardtype)
+        #Update enemy object with damage
+        Enemy.updateHealth(enemyGroup.sprite, number)
     def update(self, event_list):
         self.collision_sprite(event_list)
         self.produceHighlight()
