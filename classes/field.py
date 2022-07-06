@@ -91,10 +91,10 @@ class Playfield(pygame.sprite.Sprite):
                                     self.textObjectCreated = False
     
     def affectEnemy(self, number, cardtype):
-        print(number)
-        print(cardtype)
         #Update enemy object with damage
-        Enemy.updateHealth(enemyGroup.sprite, number)
+            #If enemy still exists
+        if enemyGroup.sprite:
+            Enemy.updateHealth(enemyGroup.sprite, number)
     def update(self, event_list):
         self.collision_sprite(event_list)
         self.produceHighlight()
