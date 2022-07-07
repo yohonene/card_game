@@ -8,7 +8,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.image.load('graphics/enemy.png').convert()
         self.rect = self.image.get_rect(midbottom = (600,200))
         self.image.set_colorkey("white")
-        self.health = 40
+        self.health = 45
         self.hpbar = HealthBar(self.health)
         self.turn = False
         self.count = 1
@@ -103,8 +103,7 @@ class Enemy(pygame.sprite.Sprite):
 
             
     def update(self, event_list):
-        if self.turn:
-            self.enemyTurn(event_list)
+        self.enemyTurn(event_list)
     
 enemyGroup = pygame.sprite.GroupSingle()
 healthGroup = pygame.sprite.GroupSingle()
