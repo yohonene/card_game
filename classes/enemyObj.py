@@ -8,7 +8,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.image.load('graphics/enemy.png').convert()
         self.rect = self.image.get_rect(midbottom = (600,200))
         self.image.set_colorkey("white")
-        self.health = 1
+        self.health = 40
         self.hpbar = HealthBar(self.health)
         self.turn = False
         self.count = 1
@@ -40,10 +40,13 @@ class Enemy(pygame.sprite.Sprite):
         pygame.time.set_timer(self.damageTakenAnimation,25,8)
         #Load effect depending on type
         if self.typeDamageTaken == "Sword":
+            self.swordsound = pygame.mixer.Sound("sound/sword.wav")
             self.effect = pygame.image.load('graphics/slash_effect.png')
+            self.swordsound.play()
         if self.typeDamageTaken == "Magic":
+            self.magicsound = pygame.mixer.Sound("sound/magic.wav")
             self.effect = pygame.image.load('graphics/magic_effect_1.png')
-            print("Magic baby!")
+            self.magicsound.play()
         self.effect.set_colorkey("black")
 
 
@@ -63,8 +66,11 @@ class Enemy(pygame.sprite.Sprite):
                 self.turn = False
 
             if event.type == self.attack_animation:
+                #Load sound
+                self.punch = pygame.mixer.Sound("sound/enemy_punch.wav")
                 #Do animation
                 self.image = pygame.image.load('graphics/enemy_attack.png').convert()
+                self.punch.play()
                 self.image.set_colorkey("white")
                 #Damage player
                 PlayerObj.health -= randint(5,10)
@@ -75,6 +81,7 @@ class Enemy(pygame.sprite.Sprite):
                 playerHealthText.add(PlayerHealth())
                 #Make it players turn
                 PlayerObj.turn = True
+                pygame.time.set_timer(pygame.USEREVENT + 5,100,1)
                 self.changeBack()
             if event.type == self.damageTakenAnimation:
                 if self.typeDamageTaken == "Magic" and self.count > 4:

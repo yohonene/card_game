@@ -53,6 +53,8 @@ class PlayCard(Card):
         self.moved = False
         #Icon Type
         self.type = icontype
+        #Sound
+        self.sound = pygame.mixer.Sound('sound/card_play.wav')
 
 
     def updateSurface(self, coord):
@@ -71,6 +73,8 @@ class PlayCard(Card):
             self.icon = pygame.image.load('graphics/sword_icon.png')
         elif self.type == "Magic":
             self.icon = pygame.image.load('graphics/magic_icon.png')
+        elif self.type == "Draw":
+            self.icon = pygame.image.load('graphics/draw_icon.png')
         else:
             self.icon = pygame.image.load("graphics/border.png")
         self.icon.set_colorkey('white')
@@ -91,7 +95,7 @@ class PlayCard(Card):
             #Scale it depending on surfaceScaled (not in field or not)
             self.border = pygame.transform.scale(self.border, (self.surfaceScaled[0], self.surfaceScaled[1]) )
             self.image.blit(self.border, self.image.get_rect())
-            self.image.blit(img, self.image.get_rect().center)
+            self.image.blit(img, self.image.get_rect().bottomleft)
             
     def move_card_animated(self):
         #Update per tick, + 1 to y
@@ -104,6 +108,8 @@ class PlayCard(Card):
             #Record location
 
     def cardKillTimer(self):
+        #Play card sound ffect
+        self.sound.play()
         self.card_death_animation = pygame.USEREVENT + 1
         self.start_time = pygame.time.get_ticks()
         pygame.time.set_timer(self.card_death_animation,35,60)

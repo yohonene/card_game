@@ -1,7 +1,8 @@
 import pygame
-from classes.cardsObject import cards, PlayCard
+from classes.cardsObject import cards, PlayCard, CardPositions, cardPositionObject
 from classes.enemyObj import enemyGroup, Enemy
 from classes.player import PlayerObj
+from random import randint, choice
 
 
 class Playfield(pygame.sprite.Sprite):
@@ -15,10 +16,16 @@ class Playfield(pygame.sprite.Sprite):
         self.image.fill((100,100,100))
         self.setup()
         #Text surface
+        #sound
+        self.sound = self.sound = pygame.mixer.Sound('sound/card_draw.mp3')
     
     def setup(self):
         #Draw border where card can be played
         self.border = pygame.draw.rect(self.image, 'darkgrey', self.image.get_rect(), 10, 20)
+        #setup timer
+        self.spawning_cards = pygame.USEREVENT + 5
+        #Start with 4 cards
+        pygame.time.set_timer(self.spawning_cards,100,4)
 
 
     def produceHighlight(self):
@@ -71,14 +78,12 @@ class Playfield(pygame.sprite.Sprite):
                                 #Check if normal card or number card
                                 number = getattr(dropped_card, "number")
                                 cardtype = getattr(dropped_card, "type")
-                                #Apply card effects to enemy    
-                                self.affectEnemy(number, cardtype)
                                 ##
                                 text_position = list(self.position)
                                 #Create text to display
-                                test_display = str(number) + " " + cardtype
+                                test_display = str(number) + ": " + cardtype
                                 #Give text position below field
-                                text_position = text_position[0]-25, text_position[1]+150
+                                text_position = text_position[0]-475, text_position[1]-150
                                 #If no text object exists for this field
                                 if not self.textObjectCreated:
                                     #Draw number and type screen
@@ -91,7 +96,17 @@ class Playfield(pygame.sprite.Sprite):
                                     #Set bool to false, allow text to be created
                                     self.textObjectCreated = False
                                 #Change Turn to Enemy if still Alive
-                                self.changeTurn()
+                                #Change if card ISNT 3 or below
+                                if cardtype == "Draw":
+                                    pygame.time.set_timer(self.spawning_cards,100,number)
+                                elif number < 4:
+                                    self.affectEnemy(number, cardtype)
+                                elif number > 3:
+                                    #Apply card effects to enem
+                                    self.affectEnemy(number, cardtype)
+                                    self.changeTurn()
+                                    
+                                
     
     def affectEnemy(self, number, cardtype):
         #Update enemy object with damage
@@ -111,9 +126,33 @@ class Playfield(pygame.sprite.Sprite):
             Enemy.__setattr__(enemyGroup.sprite,"turn", True)
     #############################   
     
+    def spawnCard(self, event_list):
+        for event in event_list:
+            if event.type == self.spawning_cards:
+                try:
+                    pos = CardPositions.avaliableSpot(cardPositionObject)
+                    if pos == None:
+                        print("Limit of cards reached")
+                        #Print in terminal, then stop pos from going forward and breaking object call
+                        break
+                except:
+                    print("Limit of cards reached")
+                else:
+                    text = ["Sword","Magic","Sword","Magic", "Draw"]
+                    #Provide: position, number and what kind of card to create
+                    card_type = choice(text)
+                    if card_type == "Draw":
+                        cards.add(PlayCard(randint(1,3),(pos),card_type))
+                    else:
+                        cards.add(PlayCard(randint(1,10),(pos),card_type))
+                    self.sound.play()
+                    
+
+
     def update(self, event_list):
         self.collision_sprite(event_list)
         self.produceHighlight()
+        self.spawnCard(event_list)
 
 fieldGroup = pygame.sprite.Group()
 textFieldGroup = pygame.sprite.Group()

@@ -3,9 +3,11 @@ import pygame
 class Player():
     def __init__(self):
         self.turn = True
-        self.health = 100
+        self.health = 75
         self.turn_count = 1
         self.card_count = 0
+    
+    
 
 
 PlayerObj = Player()
@@ -34,7 +36,7 @@ class PlayerHealth(pygame.sprite.Sprite):
         cardText = font.render("Cards: "+ self.card_count, True, 'white')
         self.image.blit(cardText, (30,25))
 
-        healthText = font.render("Health: "+ self.text, True, 'white')
+        healthText = font.render("Health: "+ self.text, True, 'green')
         self.image.blit(healthText, (30,80))
 
         TurnText = font.render('Turns: ' + self.Turns, True, 'white')

@@ -15,8 +15,8 @@ clock = pygame.time.Clock()
 
 
 #Game States 
-win = False #If player wins
-level = True #Actual Game
+win = True #If player wins
+level = False #Actual Game
 
 #Intialise Card Class, Button Class, and Field Class
 c = classes.cardsObject
@@ -34,16 +34,20 @@ def gameState():
         return True
 
 
-#Initial Game State Object Paramaters
 
+#Initial Game State Object Paramaters
 def levelCreate():
-    buttonPositionList = [(100,100),(100,200),(100,300)]
-    b.buttonGroup.add(classes.button.DealButton('orange', 100, 75, buttonPositionList[0], 'Sword' ))
-    b.buttonGroup.add(classes.button.DealButton('green', 100, 75, buttonPositionList[1], 'Magic' ))
+    # buttonPositionList = [(100,100),(100,200),(100,300)]
+    # b.buttonGroup.add(classes.button.DealButton('orange', 100, 75, buttonPositionList[0], 'Sword' ))
+    # b.buttonGroup.add(classes.button.DealButton('green', 100, 75, buttonPositionList[1], 'Magic' ))
     f.fieldGroup.add(classes.field.Playfield((600,500)))
     e.enemyGroup.add(classes.enemyObj.Enemy())
     p.playerHealthText.add(classes.player.PlayerHealth())
 
+#bg music
+bg_music = pygame.mixer.Sound('sound/roguelegacy2_suntower2.mp3')
+bg_music.play(-1)
+bg_music.set_volume(0.25)
 #Populate Background
 bg = pygame.Surface(screen.get_size()).convert()
 bg.fill((100,100,100))
@@ -59,14 +63,32 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit
             exit()
+        if win:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                levelCreate()
+                bg.fill((100,100,100))
+                level = True
+                win = False
 
     #Actual Gameplay
     if win:
+        f.fieldGroup.empty()
+        e.enemyGroup.empty()
+        p.playerHealthText.empty()
+        f.textFieldGroup.empty()
+        c.cards.empty()
         bg.fill((25,25,100))
         screen.blit(bg, (0,0)) 
         font = pygame.font.SysFont(None, 150)
-        Text = font.render("You win!", True, 'white')
+        Text = font.render("Click to Play", True, 'white')
+        Text2 = font.render("+ = Draw", True, 'Grey')
+        Text3 = font.render("Swords / Eye = Attack", True, 'green')
+        font = pygame.font.SysFont(None, 70)
+        Text4 = font.render("If you play a card less than 4, you may play it again", True, 'red')
         screen.blit(Text, (55,50))
+        screen.blit(Text2, (300,300))
+        screen.blit(Text3, (55,500))
+        screen.blit(Text4, (0,700))
 
     elif level:
         screen.blit(bg, (0,0)) 
