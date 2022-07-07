@@ -97,7 +97,7 @@ class Playfield(pygame.sprite.Sprite):
         #Update enemy object with damage
             #If enemy still exists
         if enemyGroup.sprite:
-            Enemy.updateHealth(enemyGroup.sprite, number)
+            Enemy.updateHealth(enemyGroup.sprite, number, cardtype)
 
     #####CHANGE TURN METHOD#####
     def changeTurn(self):
@@ -106,7 +106,7 @@ class Playfield(pygame.sprite.Sprite):
             #Change turn from self to enemy
             PlayerObj.turn = False
             #Start timer for animation
-            Enemy.setTimer(enemyGroup.sprite)
+            Enemy.setAttackTimer(enemyGroup.sprite)
             #Change enemy turn to True
             Enemy.__setattr__(enemyGroup.sprite,"turn", True)
     #############################   

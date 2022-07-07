@@ -14,23 +14,30 @@ playerHealthText = pygame.sprite.GroupSingle()
 class PlayerHealth(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((275,175))
-        self.rect = self.image.get_rect(midbottom = (1050,750))
-        self.image.fill((25,25,100))
+        self.image = pygame.Surface((300,200))
+        self.rect = self.image.get_rect(midbottom = (950,750))
+        self.image.fill((100,100,100))
         self.text = str(PlayerObj.health)
         self.Turns = str(PlayerObj.turn_count)
         self.card_count = str(PlayerObj.card_count)
         self.createText()
+        self.createBorder()
+
+    def createBorder(self):
+        self.border = pygame.image.load("graphics/health_border.png")
+        self.border.set_colorkey("black")
+        self.image.blit(self.border, self.image.get_rect())
+
     
     def createText(self):
         font = pygame.font.SysFont(None, 40)
         cardText = font.render("Cards: "+ self.card_count, True, 'white')
-        self.image.blit(cardText, (5,5))
+        self.image.blit(cardText, (30,25))
 
         healthText = font.render("Health: "+ self.text, True, 'white')
-        self.image.blit(healthText, (5,75))
+        self.image.blit(healthText, (30,80))
 
         TurnText = font.render('Turns: ' + self.Turns, True, 'white')
-        self.image.blit(TurnText, (5,145))
+        self.image.blit(TurnText, (30,135))
 
 

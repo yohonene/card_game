@@ -15,7 +15,7 @@ clock = pygame.time.Clock()
 
 
 #Game States 
-debug = False #Allows testing of Card Objects
+win = False #If player wins
 level = True #Actual Game
 
 #Intialise Card Class, Button Class, and Field Class
@@ -24,6 +24,15 @@ b = classes.button
 f = classes.field
 e = classes.enemyObj
 p = classes.player
+
+#Check if enemy dead
+
+def gameState():
+    if classes.enemyObj.enemyGroup.sprite:
+        return False
+    else:
+        return True
+
 
 #Initial Game State Object Paramaters
 
@@ -52,7 +61,14 @@ while True:
             exit()
 
     #Actual Gameplay
-    if level:
+    if win:
+        bg.fill((25,25,100))
+        screen.blit(bg, (0,0)) 
+        font = pygame.font.SysFont(None, 150)
+        Text = font.render("You win!", True, 'white')
+        screen.blit(Text, (55,50))
+
+    elif level:
         screen.blit(bg, (0,0)) 
         f.textFieldGroup.draw(screen)
         f.fieldGroup.draw(screen)
@@ -68,6 +84,8 @@ while True:
         e.healthGroup.draw(screen)
         e.enemyGroup.update(event_list)
         p.playerHealthText.draw(screen)
+
+        win = gameState()
 
     
     pygame.display.update()
