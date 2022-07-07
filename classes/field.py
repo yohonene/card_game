@@ -99,9 +99,9 @@ class Playfield(pygame.sprite.Sprite):
                                 #Change if card ISNT 3 or below
                                 if cardtype == "Draw":
                                     pygame.time.set_timer(self.spawning_cards,100,number)
-                                elif number < 4:
+                                elif number < 4 and PlayerObj.card_count != 0:
                                     self.affectEnemy(number, cardtype)
-                                elif number > 3:
+                                else:
                                     #Apply card effects to enem
                                     self.affectEnemy(number, cardtype)
                                     self.changeTurn()
